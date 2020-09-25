@@ -1,9 +1,9 @@
 $(document).ready(function () {
   $(".currentTime").text(moment().format("llll"));
-  $(document).foundation();
+  //$(document).foundation();
 });
 var country = "";
-var city = "";
+var city = "Zurich";
 var startDate = "";
 var endDate = "";
 var APIKey = "166a433c57516f51dfab1f7edaed8413";
@@ -13,8 +13,8 @@ var queryURL =
   "https://api.openweathermap.org/data/2.5/weather?" +
   "q=" +
   city +
-  "," +
-  country +
+  //   "," +
+  //   country +
   "&appid=" +
   APIKey;
 
@@ -29,7 +29,7 @@ $.ajax({
     var lon = response.coord.lon;
     var countrycode = response.sys.country;
     // function calls using the information we got from the weatherapi call
-    console.log(queryURL);
+    console.log(response.sys.country);
     calendricapi(countrycode);
     weatherforcastapi(lat, lon);
     coutryflag(countrycode);
@@ -76,5 +76,13 @@ function coutryflag(countrycode) {
     method: "GET",
   }).then(function (response) {
     //  country flag code goes here
+    console.log(response);
+    var imgFlag = $("<img>").attr("src", response.flag);
+    $(".flag").append(imgFlag);
+
+    $(".language").text(`Language: ${response.languages[0].name}`);
+    $(".population").text(`Population: ${response.population}`);
+    $(".currencies").text(`Currencies: ${response.currencies[0].name}`);
+    $(".callingCode").text(`Dialing code: +${response.callingCodes}`);
   });
 }
